@@ -40,13 +40,14 @@ capacity or require artificial upsampling at 28×28.
  
 
 ~   Class Distribution
-![Sample Images](images/class_distribution.png)
+![Class Distribution](./images/class_distribution.png)
+
 
 ~   Sample Images
-![Sample Images](images/sample_images.png)
+![Sample Images](./images/sample_images.png)
 
 ~   Pixel Statistics
-![Pixel Statistics](images/pixel_distribution.png)
+![Pixel Statistics](./images/pixel_distribution.png)
 
 3. Training
 -----------
@@ -99,7 +100,7 @@ capacity or require artificial upsampling at 28×28.
  
 
 ~   Failure Cases
-![Sample Images](images/error_analysis.png)
+![Sample Images](./images/error_analysis.png)
 
 6. Model Comparison
 -------------------

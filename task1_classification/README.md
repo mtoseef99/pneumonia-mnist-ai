@@ -45,7 +45,8 @@ After running the notebook, the following files are generated:
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 task1_classification/
-├── task1_classification.ipynb   # Main notebook
+├── task1_classification.ipynb           # Main notebook
+├── task1_classification report.md       # Report
 ├── models/
 │   └── task1_best_model.pth             # Best model checkpoint
 │   └── summary_metrics.json             # Test metrics (JSON)
