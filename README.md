@@ -44,6 +44,9 @@ Train a custom CNN on PneumoniaMNIST and perform comprehensive evaluation.
 **→ Full details, setup, and run instructions:**
 [task1_classification/README.md](task1_classification/README.md)
 
+**→ Report of Task 1:**
+[task1_classification report.md](task1_classification/task1_classification%20report.md)
+
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Quick start (CPU sufficient)
 Open task1_classification/task1_classification.ipynb in Colab → Run all
