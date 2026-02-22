@@ -1,0 +1,23 @@
+# Jupyter
+.ipynb_checkpoints/
+**/.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# HuggingFace — never commit model weights
+.cache/
+*.bin
+*.safetensors
+
+# Large model files (use Git LFS instead)
+*.pth
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Secrets
+.env
+*.token
