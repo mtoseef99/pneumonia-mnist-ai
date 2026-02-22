@@ -1,0 +1,640 @@
+{
+  "config": {
+    "vlm_model_id": "google/medgemma-1.5-4b-it",
+    "vlm_max_new_tokens": 512,
+    "vlm_temperature": 0.3,
+    "vlm_do_sample": true,
+    "upscale_size": 224,
+    "n_normal": 5,
+    "n_pneumonia": 5,
+    "n_ambiguous": 2,
+    "random_seed": 42,
+    "cnn_model_path": "/content/drive/MyDrive/postdoc_challenge/task1/task1_best_model.pth",
+    "report_dir": "/content/drive/MyDrive/postdoc_challenge/task2/reports",
+    "figure_dir": "/content/drive/MyDrive/postdoc_challenge/task2/images",
+    "results_dir": "/content/drive/MyDrive/postdoc_challenge/task2/results"
+  },
+  "prompts": {
+    "baseline": {
+      "name": "Baseline (Open-ended)",
+      "text": "Describe this chest X-ray image. What findings do you observe?",
+      "rationale": "Open-ended prompt with no structural constraints. Establishes what the model generates with minimal guidance. Serves as the experimental control."
+    },
+    "structured_clinical": {
+      "name": "Structured Clinical Report",
+      "text": "You are a radiologist reviewing a chest X-ray. Provide a structured report with the following sections:\n1. FINDINGS: Describe all observable features of the chest X-ray.\n2. IMPRESSION: Summarize the overall assessment.\n3. CLASSIFICATION: State whether the X-ray appears Normal or shows signs of Pneumonia.\nBe concise and clinically precise.",
+      "rationale": "Structured prompt mimicking radiology reporting format. Tests whether explicit structure improves clinical relevance and output organization. Role assignment ('radiologist') may activate domain-specific language patterns."
+    },
+    "constrained_binary": {
+      "name": "Constrained Binary Assessment",
+      "text": "Examine this chest X-ray image carefully. Based on what you observe, answer the following:\n1. Is there evidence of pneumonia in this image? (Yes/No)\n2. What specific visual features support your assessment?\n3. How confident are you in this assessment? (High/Medium/Low)\nYou must answer Yes or No for question 1 even if image quality is limited.",
+      "rationale": "Forces binary classification output, directly comparable to ground truth labels and CNN predictions. Final instruction ensures classification is provided even on degraded inputs, while confidence level (Q3) captures self-calibration without allowing refusal."
+    }
+  },
+  "selected_images": [
+    {
+      "index": 146,
+      "ground_truth": 0,
+      "gt_label": "Normal",
+      "cnn_prediction": 1,
+      "cnn_label": "Pneumonia",
+      "cnn_confidence": 0.6570901274681091,
+      "category": "False Positive"
+    },
+    {
+      "index": 370,
+      "ground_truth": 0,
+      "gt_label": "Normal",
+      "cnn_prediction": 1,
+      "cnn_label": "Pneumonia",
+      "cnn_confidence": 0.9985193610191345,
+      "category": "False Positive"
+    },
+    {
+      "index": 68,
+      "ground_truth": 0,
+      "gt_label": "Normal",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.9585130885243416,
+      "category": "True Negative"
+    },
+    {
+      "index": 30,
+      "ground_truth": 0,
+      "gt_label": "Normal",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.7173529863357544,
+      "category": "True Negative"
+    },
+    {
+      "index": 267,
+      "ground_truth": 0,
+      "gt_label": "Normal",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.9932547742500901,
+      "category": "True Negative"
+    },
+    {
+      "index": 176,
+      "ground_truth": 1,
+      "gt_label": "Pneumonia",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.9789962880313396,
+      "category": "False Negative"
+    },
+    {
+      "index": 608,
+      "ground_truth": 1,
+      "gt_label": "Pneumonia",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.6683408915996552,
+      "category": "False Negative"
+    },
+    {
+      "index": 406,
+      "ground_truth": 1,
+      "gt_label": "Pneumonia",
+      "cnn_prediction": 1,
+      "cnn_label": "Pneumonia",
+      "cnn_confidence": 0.9999192953109741,
+      "category": "True Positive"
+    },
+    {
+      "index": 409,
+      "ground_truth": 1,
+      "gt_label": "Pneumonia",
+      "cnn_prediction": 1,
+      "cnn_label": "Pneumonia",
+      "cnn_confidence": 0.9998949766159058,
+      "category": "True Positive"
+    },
+    {
+      "index": 359,
+      "ground_truth": 1,
+      "gt_label": "Pneumonia",
+      "cnn_prediction": 1,
+      "cnn_label": "Pneumonia",
+      "cnn_confidence": 0.9997201561927795,
+      "category": "True Positive"
+    },
+    {
+      "index": 180,
+      "ground_truth": 1,
+      "gt_label": "Pneumonia",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.5129646062850952,
+      "category": "Ambiguous (Low CNN Confidence)"
+    },
+    {
+      "index": 423,
+      "ground_truth": 0,
+      "gt_label": "Normal",
+      "cnn_prediction": 0,
+      "cnn_label": "Normal",
+      "cnn_confidence": 0.5175335109233856,
+      "category": "Ambiguous (Low CNN Confidence)"
+    }
+  ],
+  "cnn_available": true,
+  "results": [
+    {
+      "image_index": 146,
+      "category": "False Positive",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.6570901274681091,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description:\n\n**Overall Impression:** The image appears to be a chest X-ray, but the quality is poor due to the low resolution and lack of contrast. It's difficult to make definitive conclusions.\n\n**Observations:**\n\n*   **Heart Size:** The heart silhouette is visible, but its size is difficult to assess accurately due to the poor image quality.\n*   **Lung Fields:** The lung fields are not clearly visible. There is significant blurring and lack of detail, making it hard to identify any specific structures like the pulmonary vessels or lung markings.\n*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) is also not clearly visible.\n*   **Bones:** The ribs and other bony structures are present, but they are also blurred.\n\n**Limitations:**\n\n*   **Low Resolution:** The image is very low resolution, making it difficult to see fine details.\n*   **Poor Contrast:** The contrast is poor, which makes it hard to differentiate between different structures.\n*   **Blurring:** The image is significantly blurred, which makes it difficult to interpret.\n\n**Conclusion:**\n\nDue to the poor image quality, it is not possible to provide a reliable interpretation of the chest X-ray. A higher-resolution image would be needed for a proper assessment.\n\n**Disclaimer:** I am an AI and cannot provide medical diagnoses. This description is based solely on the visual information provided in the image. A qualified radiologist should interpret the X-ray to provide a diagnosis."
+    },
+    {
+      "image_index": 146,
+      "category": "False Positive",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.6570901274681091,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray shows a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size appears normal. The mediastinal contours are unremarkable. No significant bony abnormalities are noted.\n\nIMPRESSION:\nNo acute cardiopulmonary process identified.\n\nCLASSIFICATION:\nNormal"
+    },
+    {
+      "image_index": 146,
+      "category": "False Positive",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.6570901274681091,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The lung fields appear relatively clear, and there are no obvious consolidations, infiltrates, or air bronchograms that would suggest pneumonia.\n3.  **Low**\n    The image quality is poor, making it difficult to assess for subtle findings.\n"
+    },
+    {
+      "image_index": 370,
+      "category": "False Positive",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9985193610191345,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description of the chest X-ray:\n\n**Overall Impression:** The image is difficult to interpret due to the low resolution and significant blurring. It is challenging to identify specific anatomical structures with certainty.\n\n**Potential Observations (with caveats):**\n\n*   **Lung Fields:** The lung fields appear somewhat hazy, which could be due to the low resolution or other factors.\n*   **Heart Size:** The heart silhouette is not clearly defined, making it difficult to assess its size.\n*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) is also difficult to visualize.\n*   **Bones:** The ribs and other bony structures are not clearly visible.\n\n**Limitations:**\n\n*   **Low Resolution:** The image quality is poor, making it difficult to discern fine details.\n*   **Blurring:** The image is significantly blurred, further obscuring any potential findings.\n*   **Lack of Contrast:** The contrast between different tissues is not well-defined.\n\n**Conclusion:**\n\nDue to the poor image quality, it is not possible to provide a definitive diagnosis. A higher-resolution image would be required for a proper interpretation.\n\n**Disclaimer:** I am an AI and cannot provide medical diagnoses. A qualified radiologist should interpret the image."
+    },
+    {
+      "image_index": 370,
+      "category": "False Positive",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9985193610191345,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray demonstrates a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size appears within normal limits. The mediastinum is unremarkable. No significant bony abnormalities are identified.\n\nIMPRESSION:\nNo acute cardiopulmonary process identified.\n\nCLASSIFICATION:\nNormal"
+    },
+    {
+      "image_index": 370,
+      "category": "False Positive",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9985193610191345,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The lung fields appear relatively clear, and there are no focal consolidations, opacities, or infiltrates that would be characteristic of pneumonia.\n3.  **Low**\n    The image quality is poor, making it difficult to assess for subtle findings.\n"
+    },
+    {
+      "image_index": 68,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9585130885243416,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image provided, here's a description of the chest X-ray:\n\n**Overall Impression:**\n\nThe image appears to be a chest X-ray. However, due to the low resolution and lack of contrast, it is difficult to make definitive interpretations.\n\n**Observations:**\n\n*   **Lung Fields:** The lung fields are somewhat obscured by the low resolution. There is some increased opacity in the lower lung zones, which could be due to various factors such as atelectasis (lung collapse), fluid accumulation (pleural effusion), or consolidation (pneumonia).\n*   **Heart Size:** The heart size is difficult to assess due to the low resolution.\n*   **Mediastinum:** The mediastinum (the space in the chest between the lungs containing the heart, great vessels, trachea, etc.) appears relatively clear, but further evaluation is needed.\n*   **Bones:** The ribs and clavicles are visible, but the bones are not well-defined.\n\n**Limitations:**\n\n*   **Low Resolution:** The image is very low resolution, making it difficult to see fine details.\n*   **Lack of Contrast:** The lack of contrast makes it hard to differentiate between different tissues.\n\n**Conclusion:**\n\nWithout a higher-resolution image and clinical context, it is impossible to provide a definitive diagnosis. The image shows some increased opacity in the lower lung zones, but further evaluation is needed to determine the cause.\n\n**Disclaimer:** This is a preliminary interpretation based on a low-resolution image. A qualified radiologist should interpret the image in the context of the patient's clinical history and perform appropriate follow-up imaging if necessary."
+    },
+    {
+      "image_index": 68,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9585130885243416,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\n\nThe chest X-ray demonstrates a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size appears within normal limits. The mediastinal contours are unremarkable. No significant bony abnormalities are identified.\n\nIMPRESSION:\n\nNo acute cardiopulmonary process identified.\n\nCLASSIFICATION:\n\nNormal."
+    },
+    {
+      "image_index": 68,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9585130885243416,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry to see any consolidation, infiltrates, or other typical signs of pneumonia.\n3.  **Low**\n"
+    },
+    {
+      "image_index": 30,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.7173529863357544,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the provided image, here's a description of the chest X-ray:\n\n**Overall Impression:**\n\nThe image shows a frontal view of the chest. The lungs appear relatively clear, but there are some subtle findings that warrant further investigation.\n\n**Specific Findings:**\n\n*   **Lung Fields:** The lung fields are generally clear, with no obvious large consolidations or effusions.\n*   **Heart Size:** The heart size appears within normal limits.\n*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) appears unremarkable.\n*   **Bones:** The ribs and clavicles are visible.\n*   **Possible Subtle Findings:** There are some subtle opacities or densities in the lung fields, particularly in the lower lung regions. These could represent various conditions, such as atelectasis (collapsed lung tissue), small nodules, or early signs of infection.\n\n**Important Considerations:**\n\n*   **Image Quality:** The image quality is somewhat limited due to the low resolution and potential artifacts. This makes it difficult to assess subtle details.\n*   **Clinical Context:** A definitive diagnosis cannot be made based on this image alone. The clinical history, symptoms, and other relevant information are crucial for interpretation.\n\n**Disclaimer:**\n\nI am an AI and cannot provide medical diagnoses. A qualified radiologist or physician should interpret the X-ray image in the context of the patient's clinical presentation."
+    },
+    {
+      "image_index": 30,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.7173529863357544,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe image shows a chest X-ray. The lungs appear clear bilaterally. The heart size is normal. The mediastinum is unremarkable. There is no pleural effusion or pneumothorax.\n\nIMPRESSION:\nNo acute cardiopulmonary process.\n\nCLASSIFICATION:\nNormal"
+    },
+    {
+      "image_index": 30,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.7173529863357544,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The lung fields appear relatively clear, without consolidation, infiltrates, or other typical signs of pneumonia.\n3.  **Low**\n    *   The image quality is poor, making it difficult to assess for subtle findings.\n    *   Without a comparison to a previous image or a clear clinical context, it's hard to be certain.\n    *   The lack of specific findings makes it difficult to confidently rule out pneumonia.\n"
+    },
+    {
+      "image_index": 267,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9932547742500901,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description of the chest X-ray:\n\n**Overall Impression:**\n\nThe image shows a chest X-ray view. The image is somewhat blurry and difficult to interpret due to the low resolution and the presence of artifacts.\n\n**Observations:**\n\n*   **Lung Fields:** The lung fields appear relatively clear, but the image quality is poor, making it difficult to assess for subtle abnormalities.\n*   **Heart Size:** The heart size is difficult to determine due to the image quality.\n*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) appears unremarkable, but again, the image quality limits this assessment.\n*   **Bones:** The ribs and other bony structures are visible, but the image quality makes it hard to assess for fractures or other bone abnormalities.\n\n**Limitations:**\n\nDue to the low resolution and artifacts, it is difficult to make any definitive conclusions about the patient's condition. A higher-quality image would be needed for a proper interpretation.\n\n**Disclaimer:**\n\nI am an AI and cannot provide medical diagnoses. This description is based solely on the visual information in the image. A qualified radiologist should interpret the X-ray and provide a diagnosis."
+    },
+    {
+      "image_index": 267,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9932547742500901,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS: The chest X-ray shows a clear view of the lungs, heart, and mediastinum. The lung fields are clear without focal consolidation, pleural effusion, or pneumothorax. The heart size is within normal limits. The mediastinal contours are unremarkable.\n\nIMPRESSION: No acute cardiopulmonary process.\n\nCLASSIFICATION: Normal."
+    },
+    {
+      "image_index": 267,
+      "category": "True Negative",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9932547742500901,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The lung fields appear relatively clear, and there are no obvious consolidations, infiltrates, or air bronchograms that would suggest pneumonia.\n3.  **Low**\n    The image quality is poor, making it difficult to assess for subtle findings. The lack of clear lung markings and the presence of artifacts further reduce the confidence in the assessment.\n"
+    },
+    {
+      "image_index": 176,
+      "category": "False Negative",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9789962880313396,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the provided image, here's a description of the chest X-ray:\n\n**Overall Impression:** The image is a chest X-ray, but it is heavily obscured by significant artifacts and low contrast. It is difficult to discern any clear anatomical structures.\n\n**Observations:**\n\n*   **Obscuration:** The image is largely uninterpretable due to the presence of artifacts, which are likely due to the image quality or processing.\n*   **Lack of Clear Structures:** It is impossible to identify the lungs, heart, mediastinum, or other typical structures of a chest X-ray.\n*   **Possible Artifacts:** There are areas of increased density and decreased density that could be artifacts, such as from the patient's body habitus, positioning, or equipment issues.\n\n**Conclusion:**\n\nDue to the poor image quality and significant artifacts, it is not possible to provide a meaningful interpretation of this chest X-ray. A clear and interpretable image is required for any clinical assessment.\n\n**Disclaimer:** I am an AI and cannot provide medical diagnoses. This description is based solely on the visual information provided in the image. A qualified radiologist should interpret the image for any clinical significance."
+    },
+    {
+      "image_index": 176,
+      "category": "False Negative",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9789962880313396,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray demonstrates a normal cardiomediastinal silhouette. The lungs are clear bilaterally without focal consolidation, pleural effusion, or pneumothorax. The osseous structures are unremarkable.\n\nIMPRESSION:\nNo acute cardiopulmonary process.\n\nCLASSIFICATION:\nNormal."
+    },
+    {
+      "image_index": 176,
+      "category": "False Negative",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.9789962880313396,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia.** The image is too blurry to see any consolidation, infiltrates, or other typical signs of pneumonia.\n3.  **Low**\n"
+    },
+    {
+      "image_index": 608,
+      "category": "False Negative",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.6683408915996552,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the provided image, here's a description of the chest X-ray:\n\n**Overall Impression:** The image appears to be a chest X-ray, but it is heavily degraded and difficult to interpret due to the low resolution and lack of contrast.\n\n**Observations:**\n\n*   **Opacity:** There is some degree of opacity (whiteness) in the lower lung fields, potentially indicating fluid or consolidation. However, it's difficult to determine the exact location and extent due to the poor image quality.\n*   **Heart Size:** The heart size is difficult to assess accurately due to the image quality.\n*   **Mediastinum:** The mediastinum (the central area of the chest containing the heart, great vessels, and trachea) appears relatively normal, but again, it's hard to be certain.\n*   **Bones:** The ribs and other bony structures are visible, but they are not well-defined.\n\n**Limitations:**\n\n*   **Low Resolution:** The image is very low resolution, making it difficult to see fine details.\n*   **Lack of Contrast:** The contrast is poor, making it hard to differentiate between different densities.\n*   **Image Quality:** The image is not clear, and it is difficult to make any definitive conclusions.\n\n**Conclusion:**\n\nDue to the poor image quality, it is not possible to provide a definitive diagnosis. The opacity in the lower lung fields could be due to various causes, such as fluid, consolidation, or atelectasis. Further evaluation with a higher-quality image is needed for a more accurate interpretation.\n\n**Disclaimer:** This is a preliminary interpretation based on a low-quality image. A qualified radiologist should be consulted for a definitive diagnosis."
+    },
+    {
+      "image_index": 608,
+      "category": "False Negative",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.6683408915996552,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray shows a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size appears normal. The mediastinum is unremarkable.\n\nIMPRESSION:\nNo acute cardiopulmonary process identified.\n\nCLASSIFICATION:\nNormal."
+    },
+    {
+      "image_index": 608,
+      "category": "False Negative",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.6683408915996552,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry to see any consolidation, infiltrates, or other typical signs of pneumonia.\n3.  **Low**"
+    },
+    {
+      "image_index": 406,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9999192953109741,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description of the chest X-ray:\n\n**Overall Impression:** The image is a chest X-ray, but it is heavily obscured by significant blurring and noise. It is difficult to make a definitive diagnosis based on this image alone.\n\n**Observations:**\n\n*   **Obscuration:** The image is very blurry, making it difficult to see the lung fields, heart, or other structures clearly.\n*   **Noise:** There is a lot of noise present, which further obscures the image.\n*   **Possible Structures:** It is difficult to identify any specific structures, such as the lungs, heart, or ribs.\n\n**Conclusion:**\n\nDue to the severe blurring and noise, it is impossible to provide a reliable interpretation of the chest X-ray. A clear image is required for a proper assessment.\n\n**Disclaimer:** I am an AI and cannot provide medical diagnoses. A qualified radiologist or physician is needed to interpret medical images."
+    },
+    {
+      "image_index": 406,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9999192953109741,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray demonstrates a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size is within normal limits. The mediastinum is unremarkable. The bony structures are intact.\n\nIMPRESSION:\nNo acute cardiopulmonary process identified.\n\nCLASSIFICATION:\nNormal."
+    },
+    {
+      "image_index": 406,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9999192953109741,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry to see any specific signs of consolidation, infiltrates, or other features typically associated with pneumonia.\n3.  **Low**"
+    },
+    {
+      "image_index": 409,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9998949766159058,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description of the chest X-ray:\n\n**Overall Impression:** The image appears to be a chest X-ray, but the image quality is poor, making it difficult to interpret with certainty.\n\n**Observations:**\n\n*   **Opacity:** There is some degree of opacity (whiteness) in the lung fields, which could suggest consolidation (fluid or infection) or other abnormalities. However, the poor image quality makes it hard to determine the exact cause.\n*   **Heart Size:** The heart size appears to be within normal limits, but the image is not clear enough to confirm this definitively.\n*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) appears relatively normal, but again, the image quality is not ideal for a detailed assessment.\n*   **Bones:** The ribs and other bony structures are visible, but the image quality is not sufficient to assess for fractures or other bone abnormalities.\n\n**Limitations:**\n\n*   **Poor Image Quality:** The low resolution and lack of contrast make it difficult to see fine details.\n*   **Lack of Clinical Context:** Without knowing the patient's history, symptoms, and other relevant information, it's impossible to provide a definitive diagnosis.\n\n**In summary:** The chest X-ray shows some opacity in the lung fields, but the poor image quality limits the ability to make a definitive diagnosis. A radiologist would need a higher-quality image and clinical information to provide a more accurate interpretation.\n\n**Disclaimer:** I am an AI and cannot provide medical diagnoses. This description is based on the limited information available in the image. A qualified healthcare professional should interpret the X-ray and provide a diagnosis."
+    },
+    {
+      "image_index": 409,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9998949766159058,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe lungs are clear bilaterally. The heart size is normal. The mediastinum is unremarkable. There is no pleural effusion or pneumothorax. The osseous structures are intact.\n\nIMPRESSION:\nNo acute cardiopulmonary process.\n\nCLASSIFICATION:\nNormal"
+    },
+    {
+      "image_index": 409,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9998949766159058,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry and lacks the typical features of pneumonia, such as consolidation, infiltrates, or air bronchograms.\n3.  **Low**\n"
+    },
+    {
+      "image_index": 359,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9997201561927795,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description and potential findings:\n\n**Description:**\n\nThe image appears to be a chest X-ray. It shows a frontal view of the chest, with the heart, lungs, and other structures visible. The image is somewhat blurry and difficult to interpret due to the low resolution and potential artifacts.\n\n**Potential Findings:**\n\n*   **Heart Size:** The heart size is difficult to assess accurately due to the image quality.\n*   **Lung Fields:** The lung fields are not clearly defined, making it hard to evaluate for any abnormalities like consolidation, nodules, or masses.\n*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) appears relatively normal, but it's hard to make a definitive assessment.\n*   **Bones:** The ribs and other bony structures are visible, but their detail is limited.\n\n**Important Considerations:**\n\n*   **Image Quality:** The low resolution and potential artifacts make it difficult to provide a definitive interpretation.\n*   **Clinical Context:** A proper interpretation of a chest X-ray requires clinical information about the patient, such as their symptoms, medical history, and other relevant findings.\n\n**Disclaimer:**\n\nI am an AI and cannot provide medical diagnoses. This description is based solely on the image provided and should not be considered a substitute for a professional medical evaluation by a qualified radiologist or physician."
+    },
+    {
+      "image_index": 359,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9997201561927795,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe lungs are clear bilaterally. The heart size is normal. The mediastinum is unremarkable. There is no pleural effusion or pneumothorax. The bony structures are intact.\n\nIMPRESSION:\nNo acute cardiopulmonary process.\n\nCLASSIFICATION:\nNormal."
+    },
+    {
+      "image_index": 359,
+      "category": "True Positive",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Pneumonia",
+      "cnn_confidence": 0.9997201561927795,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry to see any specific signs of consolidation, infiltrates, or other typical features of pneumonia.\n3.  **Low**\n"
+    },
+    {
+      "image_index": 180,
+      "category": "Ambiguous (Low CNN Confidence)",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.5129646062850952,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the provided image, here's a description of the chest X-ray:\n\n**Overall Impression:** The image appears to show a chest X-ray, but the quality is poor due to the low resolution and lack of contrast. It's difficult to make definitive conclusions.\n\n**Observations:**\n\n*   **General:** The image shows a general view of the chest, including the ribs, lungs, and heart silhouette.\n*   **Lung Fields:** The lung fields are not clearly defined. There is a lack of detail in the lung tissue.\n*   **Heart:** The heart silhouette is visible, but its size and shape are difficult to assess due to the poor image quality.\n*   **Other Structures:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) is not clearly visible.\n\n**Limitations:**\n\n*   **Low Resolution:** The image is very low resolution, making it difficult to see fine details.\n*   **Lack of Contrast:** The contrast is poor, which further obscures the image.\n\n**Conclusion:**\n\nDue to the poor image quality, it is not possible to provide a detailed and accurate description of the chest X-ray. A higher-quality image is needed for a proper interpretation.\n\n**Disclaimer:** I am an AI and cannot provide medical diagnoses. A qualified radiologist should interpret the image."
+    },
+    {
+      "image_index": 180,
+      "category": "Ambiguous (Low CNN Confidence)",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.5129646062850952,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray shows a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size is within normal limits. The mediastinal contours are unremarkable. No bony abnormalities are identified.\n\nIMPRESSION:\nNo acute cardiopulmonary process identified.\n\nCLASSIFICATION:\nNormal."
+    },
+    {
+      "image_index": 180,
+      "category": "Ambiguous (Low CNN Confidence)",
+      "ground_truth": "Pneumonia",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.5129646062850952,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry to see any consolidation, infiltrates, or other typical signs of pneumonia.\n3.  **Low**"
+    },
+    {
+      "image_index": 423,
+      "category": "Ambiguous (Low CNN Confidence)",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.5175335109233856,
+      "prompt_strategy": "Baseline (Open-ended)",
+      "prompt_key": "baseline",
+      "generated_report": "Based on the image, here's a description:\n\n**Description:**\n\nThe image appears to be a chest X-ray. It shows a view of the chest cavity, including the lungs and the heart silhouette. The image is somewhat blurry and lacks clear anatomical detail due to the low resolution.\n\n**Observations:**\n\n*   **Lung Fields:** The lung fields are visible, but the details are not clear. There is some haziness in the lung regions.\n*   **Heart Silhouette:** The heart silhouette is present, but it's difficult to assess its size and shape accurately.\n*   **Mediastinum:** The mediastinum (the area between the lungs containing the heart, great vessels, and trachea) is visible.\n*   **Bones:** The ribs and clavicles are visible.\n*   **Overall:** The image quality is poor, making it difficult to identify any specific abnormalities.\n\n**Important Note:**\n\nIt is crucial to remember that I am an AI and cannot provide medical diagnoses. A qualified radiologist or healthcare professional is needed to interpret the X-ray and provide a proper diagnosis.\n\nIf you have any concerns about your health or this X-ray, please consult with a medical professional."
+    },
+    {
+      "image_index": 423,
+      "category": "Ambiguous (Low CNN Confidence)",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.5175335109233856,
+      "prompt_strategy": "Structured Clinical Report",
+      "prompt_key": "structured_clinical",
+      "generated_report": "FINDINGS:\nThe chest X-ray shows a normal cardiomediastinal silhouette. The lungs are clear bilaterally with no focal consolidation, pleural effusion, or pneumothorax. The heart size is normal. The hilar contours are unremarkable.\n\nIMPRESSION:\nNormal chest X-ray.\n\nCLASSIFICATION:\nNormal."
+    },
+    {
+      "image_index": 423,
+      "category": "Ambiguous (Low CNN Confidence)",
+      "ground_truth": "Normal",
+      "cnn_prediction": "Normal",
+      "cnn_confidence": 0.5175335109233856,
+      "prompt_strategy": "Constrained Binary Assessment",
+      "prompt_key": "constrained_binary",
+      "generated_report": "1.  **No**\n2.  **The image is too blurry to identify any specific features.** There are no clear signs of consolidation, infiltrates, or other findings that would suggest pneumonia.\n3.  **Low**\n"
+    }
+  ],
+  "hallucination_flags": [
+    {
+      "Image": 146,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 146,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 146,
+      "Strategy": "constrained_binary",
+      "Suspicious Terms": "air bronchogram, bronchogram"
+    },
+    {
+      "Image": 370,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 370,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 68,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 68,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 30,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 30,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 267,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 267,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 267,
+      "Strategy": "constrained_binary",
+      "Suspicious Terms": "air bronchogram, bronchogram"
+    },
+    {
+      "Image": 176,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin"
+    },
+    {
+      "Image": 176,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin"
+    },
+    {
+      "Image": 608,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 608,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 406,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 409,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 409,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 409,
+      "Strategy": "constrained_binary",
+      "Suspicious Terms": "air bronchogram, bronchogram"
+    },
+    {
+      "Image": 359,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, heart size, trachea"
+    },
+    {
+      "Image": 359,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 180,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, trachea"
+    },
+    {
+      "Image": 180,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "mediastin, heart size"
+    },
+    {
+      "Image": 423,
+      "Strategy": "baseline",
+      "Suspicious Terms": "mediastin, trachea"
+    },
+    {
+      "Image": 423,
+      "Strategy": "structured_clinical",
+      "Suspicious Terms": "hilar, hila, mediastin, heart size"
+    }
+  ],
+  "timestamp": "2026-02-22T05:10:31.587434"
+}

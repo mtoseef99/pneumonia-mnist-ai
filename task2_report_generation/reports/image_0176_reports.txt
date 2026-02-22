@@ -1,0 +1,48 @@
+======================================================================
+IMAGE #176 -- VLM Report Generation Results
+======================================================================
+
+Ground Truth:   Pneumonia
+CNN Prediction: Normal (conf: 0.9790)
+Category:       False Negative
+Generated:      2026-02-22 05:10
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Baseline (Open-ended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Based on the provided image, here's a description of the chest X-ray:
+
+**Overall Impression:** The image is a chest X-ray, but it is heavily obscured by significant artifacts and low contrast. It is difficult to discern any clear anatomical structures.
+
+**Observations:**
+
+*   **Obscuration:** The image is largely uninterpretable due to the presence of artifacts, which are likely due to the image quality or processing.
+*   **Lack of Clear Structures:** It is impossible to identify the lungs, heart, mediastinum, or other typical structures of a chest X-ray.
+*   **Possible Artifacts:** There are areas of increased density and decreased density that could be artifacts, such as from the patient's body habitus, positioning, or equipment issues.
+
+**Conclusion:**
+
+Due to the poor image quality and significant artifacts, it is not possible to provide a meaningful interpretation of this chest X-ray. A clear and interpretable image is required for any clinical assessment.
+
+**Disclaimer:** I am an AI and cannot provide medical diagnoses. This description is based solely on the visual information provided in the image. A qualified radiologist should interpret the image for any clinical significance.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Structured Clinical Report
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FINDINGS:
+The chest X-ray demonstrates a normal cardiomediastinal silhouette. The lungs are clear bilaterally without focal consolidation, pleural effusion, or pneumothorax. The osseous structures are unremarkable.
+
+IMPRESSION:
+No acute cardiopulmonary process.
+
+CLASSIFICATION:
+Normal.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Constrained Binary Assessment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.  **No**
+2.  **There is no clear evidence of pneumonia.** The image is too blurry to see any consolidation, infiltrates, or other typical signs of pneumonia.
+3.  **Low**
+
+

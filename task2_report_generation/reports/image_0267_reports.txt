@@ -1,0 +1,51 @@
+======================================================================
+IMAGE #267 -- VLM Report Generation Results
+======================================================================
+
+Ground Truth:   Normal
+CNN Prediction: Normal (conf: 0.9933)
+Category:       True Negative
+Generated:      2026-02-22 05:10
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Baseline (Open-ended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Based on the image, here's a description of the chest X-ray:
+
+**Overall Impression:**
+
+The image shows a chest X-ray view. The image is somewhat blurry and difficult to interpret due to the low resolution and the presence of artifacts.
+
+**Observations:**
+
+*   **Lung Fields:** The lung fields appear relatively clear, but the image quality is poor, making it difficult to assess for subtle abnormalities.
+*   **Heart Size:** The heart size is difficult to determine due to the image quality.
+*   **Mediastinum:** The mediastinum (the space between the lungs containing the heart, great vessels, trachea, etc.) appears unremarkable, but again, the image quality limits this assessment.
+*   **Bones:** The ribs and other bony structures are visible, but the image quality makes it hard to assess for fractures or other bone abnormalities.
+
+**Limitations:**
+
+Due to the low resolution and artifacts, it is difficult to make any definitive conclusions about the patient's condition. A higher-quality image would be needed for a proper interpretation.
+
+**Disclaimer:**
+
+I am an AI and cannot provide medical diagnoses. This description is based solely on the visual information in the image. A qualified radiologist should interpret the X-ray and provide a diagnosis.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Structured Clinical Report
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FINDINGS: The chest X-ray shows a clear view of the lungs, heart, and mediastinum. The lung fields are clear without focal consolidation, pleural effusion, or pneumothorax. The heart size is within normal limits. The mediastinal contours are unremarkable.
+
+IMPRESSION: No acute cardiopulmonary process.
+
+CLASSIFICATION: Normal.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Constrained Binary Assessment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.  **No**
+2.  **There is no clear evidence of pneumonia in this image.** The lung fields appear relatively clear, and there are no obvious consolidations, infiltrates, or air bronchograms that would suggest pneumonia.
+3.  **Low**
+    The image quality is poor, making it difficult to assess for subtle findings. The lack of clear lung markings and the presence of artifacts further reduce the confidence in the assessment.
+
+

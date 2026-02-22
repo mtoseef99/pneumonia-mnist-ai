@@ -1,0 +1,13 @@
+Image,Category,Ground Truth,VLM,VLM Correct,CNN,CNN Correct,CNN and VLM Agree
+146,False Positive,Normal,Pneumonia,N,Pneumonia (0.66),N,Y
+370,False Positive,Normal,Pneumonia,N,Pneumonia (1.00),N,Y
+68,True Negative,Normal,Pneumonia,N,Normal (0.96),Y,N
+30,True Negative,Normal,Pneumonia,N,Normal (0.72),Y,N
+267,True Negative,Normal,Pneumonia,N,Normal (0.99),Y,N
+176,False Negative,Pneumonia,Pneumonia,Y,Normal (0.98),N,N
+608,False Negative,Pneumonia,Pneumonia,Y,Normal (0.67),N,N
+406,True Positive,Pneumonia,Pneumonia,Y,Pneumonia (1.00),Y,Y
+409,True Positive,Pneumonia,Pneumonia,Y,Pneumonia (1.00),Y,Y
+359,True Positive,Pneumonia,Pneumonia,Y,Pneumonia (1.00),Y,Y
+180,Ambiguous (Low CNN Confidence),Pneumonia,Pneumonia,Y,Normal (0.51),N,N
+423,Ambiguous (Low CNN Confidence),Normal,Pneumonia,N,Normal (0.52),Y,N

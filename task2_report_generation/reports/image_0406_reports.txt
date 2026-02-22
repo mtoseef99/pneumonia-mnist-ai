@@ -1,0 +1,47 @@
+======================================================================
+IMAGE #406 -- VLM Report Generation Results
+======================================================================
+
+Ground Truth:   Pneumonia
+CNN Prediction: Pneumonia (conf: 0.9999)
+Category:       True Positive
+Generated:      2026-02-22 05:10
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Baseline (Open-ended)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Based on the image, here's a description of the chest X-ray:
+
+**Overall Impression:** The image is a chest X-ray, but it is heavily obscured by significant blurring and noise. It is difficult to make a definitive diagnosis based on this image alone.
+
+**Observations:**
+
+*   **Obscuration:** The image is very blurry, making it difficult to see the lung fields, heart, or other structures clearly.
+*   **Noise:** There is a lot of noise present, which further obscures the image.
+*   **Possible Structures:** It is difficult to identify any specific structures, such as the lungs, heart, or ribs.
+
+**Conclusion:**
+
+Due to the severe blurring and noise, it is impossible to provide a reliable interpretation of the chest X-ray. A clear image is required for a proper assessment.
+
+**Disclaimer:** I am an AI and cannot provide medical diagnoses. A qualified radiologist or physician is needed to interpret medical images.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Structured Clinical Report
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+FINDINGS:
+The chest X-ray demonstrates a clear lung field with no obvious consolidation, pleural effusion, or pneumothorax. The heart size is within normal limits. The mediastinum is unremarkable. The bony structures are intact.
+
+IMPRESSION:
+No acute cardiopulmonary process identified.
+
+CLASSIFICATION:
+Normal.
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Prompt: Constrained Binary Assessment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+1.  **No**
+2.  **There is no clear evidence of pneumonia in this image.** The image is too blurry to see any specific signs of consolidation, infiltrates, or other features typically associated with pneumonia.
+3.  **Low**
+

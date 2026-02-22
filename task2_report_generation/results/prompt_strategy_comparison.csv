@@ -1,0 +1,4 @@
+Strategy,Avg Chars,Avg Words,Has FINDINGS,Has IMPRESSION,N Reports
+Baseline (Open-ended),1389,210,3,10,12
+Structured Clinical Report,296,38,12,12,12
+Constrained Binary Assessment,258,41,5,0,12
