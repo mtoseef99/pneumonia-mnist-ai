@@ -11,9 +11,6 @@ __pycache__/
 *.bin
 *.safetensors
 
-# Large model files (use Git LFS instead)
-*.pth
-
 # OS
 .DS_Store
 Thumbs.db
