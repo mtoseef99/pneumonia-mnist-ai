@@ -1,6 +1,9 @@
 # AI Medical Imaging — PneumoniaMNIST
 
-`Python 3.x` | `PyTorch` | `MedMNIST v2` | `MedGemma 4B-IT`
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0+-ee4c2c.svg)](https://pytorch.org/)
+[![MedMNIST v2](https://img.shields.io/badge/dataset-MedMNIST%20v2-lightblue.svg)](https://medmnist.com/)
+[![MedGemma 4B-IT](https://img.shields.io/badge/VLM-MedGemma%204B--IT-orange.svg)](https://huggingface.co/google/medgemma-4b-it)
 
 This repository is a submission for a 7-day postdoctoral technical challenge at Alfaisal University, exploring AI applications across three areas of medical imaging: CNN-based pneumonia classification, automated radiology report generation using a vision-language model, and a semantic image retrieval framework using embeddings and vector search. The work spans computer vision, natural language processing, and information retrieval — all grounded in the PneumoniaMNIST chest X-ray dataset.
 
